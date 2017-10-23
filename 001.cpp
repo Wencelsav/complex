@@ -54,6 +54,9 @@ istream & read( istream & stream, complex_t & complex ) {
     }
     else {
         stream.setstate(std::ios::failbit);
+        if(_S_failbit){
+            cout<< "error";
+        }
     }
 }
 
