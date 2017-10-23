@@ -1,91 +1,88 @@
 #include <iostream>
-#include <string>
 #include <sstream>
 
 using namespace std;
 
 struct complex_t {
-	float real;
-	float imag;
+    float real;
+    float imag;
 };
 
 complex_t add(complex_t lhs, complex_t rhs) {
-	complex_t res;
-	res.real = lhs.real + rhs.real;
-	res.imag = lhs.imag + rhs.imag;
-	return res;
+    complex_t res;
+    res.real = lhs.real + rhs.real;
+    res.imag = lhs.imag + rhs.imag;
+    return res;
 }
 
 complex_t sub(complex_t lhs, complex_t rhs) {
-	complex_t res;
-	res.real = lhs.real - rhs.real;
-	res.imag = lhs.imag - rhs.imag;
-	return res;
+    complex_t res;
+    res.real = lhs.real - rhs.real;
+    res.imag = lhs.imag - rhs.imag;
+    return res;
 }
 
 complex_t mul(complex_t lhs, complex_t rhs) {
-	complex_t res;
-	res.real = ((lhs.real * rhs.real) - (lhs.imag * rhs.imag));
-	res.imag = ((lhs.imag * rhs.real) + (lhs.real * rhs.imag));
-	return res;
+    complex_t res;
+    //res= ((lhs.real * rhs.real) - (lhs.imag * rhs.imag)+(lhs.imag * rhs.real) + (lhs.real * rhs.imag));
+    res.real = ((lhs.real * rhs.real) - (lhs.imag * rhs.imag));
+    res.imag = ((lhs.imag * rhs.real) + (lhs.real * rhs.imag));
+    return res;
 }
 
 complex_t div(complex_t lhs, complex_t rhs) {
-	complex_t res;
-	res.real = ((lhs.real * rhs.real) + (lhs.imag * rhs.imag)) / ((rhs.real * rhs.real) + (rhs.imag * rhs.imag));
-	res.imag = ((lhs.imag * rhs.real) - (lhs.real * rhs.imag)) / ((rhs.real * rhs.real) + (rhs.imag * rhs.imag));
-	return res;
+    complex_t res;
+    res.real = ((lhs.real * rhs.real) + (lhs.imag * rhs.imag)) / ((rhs.real * rhs.real) + (rhs.imag * rhs.imag));
+    res.imag = ((lhs.imag * rhs.real) - (lhs.real * rhs.imag)) / ((rhs.real * rhs.real) + (rhs.imag * rhs.imag));
+    return res;
 }
 
-bool read(istringstream & stream, complex_t & cmplx) {
-	
-	char symbol;
-	float real, imag;
-	if (stream >> symbol && symbol == '(' &&
-		stream >> real &&
-		stream >> symbol && symbol == ',' &&
-		stream >> imag &&
-		stream >> symbol && symbol == ')') {
+istream & read( istream & stream, complex_t & complex ) {
 
-		cmplx.real = real;
-		cmplx.imag = imag;
+    char symbol;
+    float real, imag;
 
-		return true;
-	}
+    if (stream >> symbol && symbol == '(' &&
+        stream >> real &&
+        stream >> symbol && symbol == ',' &&
+        stream >> imag &&
+        stream >> symbol && symbol == ')') {
 
-	return false;
+        complex.real = real;
+        complex.imag = imag;
+
+    }
+    else {
+        stream.setstate(std::ios::failbit);
+    }
 }
 
-void write(complex_t & cmplx) {
-	
-	cout << "(" << cmplx.real << "," << " " << cmplx.imag << ")";
+ostream & write( ostream & stream, complex_t complex ) {
+
+    cout << "(" << complex.real << "," << " " << complex.imag << ")";
 }
 
 int main() {
-	complex_t a, b;
-	string s;
-	char op;
-	bool q = false;
-	getline(cin, s);
-	istringstream stream(s);
-	q = read(stream, a);
-	stream >> op;
-	q = read(stream, b);
-	if (q == true) {
-		switch (op) {
-		case '+':
-		    cout <<add(a, b);break;
-		case '-':
-			cout<<sub(a, b);break;
-		case '*':
-			cout<<mul(a, b);break;
-		case '/':
-		    cout<<div(a, b);break;
-		}
-	}
-	else {
-		cout << "An error has occured while reading input data";
-	}
-	
-	return 0;
+    complex_t a, b;
+    string s;
+    char op;
+
+    getline(cin, s);
+    istringstream stream(s);
+    read(stream, a);
+    stream >> op;
+    read(stream, b);
+    switch (op) {
+            case '+':
+                write(cout,add(a,b));
+            case '-':
+                write(cout,sub(a,b));
+            case '*':
+                write(cout,mul(a,b));
+            case '/':
+                write(cout,div(a,b));
+        }
+
+
+    return 0;
 }
