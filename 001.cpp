@@ -57,7 +57,7 @@ bool read(istringstream & stream, complex_t & cmplx) {
 }
 
 void write(complex_t & cmplx) {
-	float real, imag;
+	
 	cout << "(" << cmplx.real << "," << " " << cmplx.imag << ")";
 }
 
@@ -74,22 +74,18 @@ int main() {
 	if (q == true) {
 		switch (op) {
 		case '+':
-			write(add(a, b));
-			break;
+		    cout <<add(a, b);break;
 		case '-':
-			write(sub(a, b));
-			break;
+			cout<<sub(a, b);break;
 		case '*':
-			write(mul(a, b));
-			break;
+			cout<<mul(a, b);break;
 		case '/':
-			write(div(a, b));
-			break;
+		    cout<<div(a, b);break;
 		}
 	}
 	else {
 		cout << "An error has occured while reading input data";
 	}
-	cin.get();
+	
 	return 0;
 }
