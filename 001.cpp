@@ -24,68 +24,74 @@ complex_t sub(complex_t lhs, complex_t rhs) {
 
 complex_t mul(complex_t lhs, complex_t rhs) {
     complex_t res;
-    //res= ((lhs.real * rhs.real) - (lhs.imag * rhs.imag)+(lhs.imag * rhs.real) + (lhs.real * rhs.imag));
-    res.real = ((lhs.real * rhs.real) - (lhs.imag * rhs.imag));
-    res.imag = ((lhs.imag * rhs.real) + (lhs.real * rhs.imag));
+    res.real = lhs.real * rhs.real - lhs.imag * rhs.imag;
+    res.imag = lhs.imag * rhs.real + lhs.real * rhs.imag;
     return res;
 }
 
 complex_t div(complex_t lhs, complex_t rhs) {
     complex_t res;
-    res.real = ((lhs.real * rhs.real) + (lhs.imag * rhs.imag)) / ((rhs.real * rhs.real) + (rhs.imag * rhs.imag));
-    res.imag = ((lhs.imag * rhs.real) - (lhs.real * rhs.imag)) / ((rhs.real * rhs.real) + (rhs.imag * rhs.imag));
+    res.real = (lhs.real * rhs.real + lhs.imag * rhs.imag) / (rhs.real * rhs.real + rhs.imag * rhs.imag);
+    res.imag = (lhs.imag * rhs.real - lhs.real * rhs.imag) / (rhs.real * rhs.real + rhs.imag * rhs.imag);
     return res;
 }
 
 istream & read( istream & stream, complex_t & complex ) {
-
+    
     char symbol;
     float real, imag;
-
+    
     if (stream >> symbol && symbol == '(' &&
         stream >> real &&
         stream >> symbol && symbol == ',' &&
         stream >> imag &&
         stream >> symbol && symbol == ')') {
-
+        
         complex.real = real;
         complex.imag = imag;
-
+        
     }
     else {
         stream.setstate(std::ios::failbit);
-        if(_S_failbit){
-            cout<< "error";
-        }
     }
+    
+    return stream;
 }
 
 ostream & write( ostream & stream, complex_t complex ) {
-
-    cout << "(" << complex.real << "," << " " << complex.imag << ")";
+    return stream << '(' << complex.real << ", " <<  complex.imag << ')';
 }
 
 int main() {
-    complex_t a, b;
-    string s;
-    char op;
-
-    getline(cin, s);
-    istringstream stream(s);
-    read(stream, a);
-    stream >> op;
-    read(stream, b);
-    switch (op) {
-            case '+':
-                write(cout,add(a,b));
-            case '-':
-                write(cout,sub(a,b));
-            case '*':
-                write(cout,mul(a,b));
-            case '/':
-                write(cout,div(a,b));
+    char error_message[] = "An error has occured while reading data.";
+    
+    string line;
+    if( getline(cin, line) ) {
+        istringstream stream(line);
+        
+        complex_t a, b;
+        char op;
+        if( read(stream, a) && stream >> op && read(stream, b) ) {
+            switch (op) {
+                case '+':
+                    write(cout,add(a,b));
+                case '-':
+                    write(cout,sub(a,b));
+                case '*':
+                    write(cout,mul(a,b));
+                case '/':
+                    write(cout,div(a,b));
+                default:
+                    std::cerr << error_message << std::endl;
+            }
         }
-
-
+        else {
+            std::cerr << error_message << std::endl;
+        }
+    }
+    else {
+        std::cerr << error_message << std::endl;
+    }
+    
     return 0;
 }
